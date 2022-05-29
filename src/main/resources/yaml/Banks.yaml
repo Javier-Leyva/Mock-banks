@@ -1,0 +1,1268 @@
+---
+swagger: "2.0"
+info:
+  title: Banks
+  version: 1.0.3
+  description: |-
+    [HTML Docs](/specs/bank-branches/index.html)
+
+    - Returns public information on banks and branches
+    - Returns the Bic or local identification of a bank from a contract
+  x-ibm-name: banks-info
+schemes:
+- https
+basePath: /banks
+consumes:
+- application/json
+produces:
+- application/json
+securityDefinitions:
+  JWT Profile:
+    type: oauth2
+    description: OAuth Identify, JWT Profile
+    flow: implicit
+    scopes:
+      bankbranch.read: Banks Branches scope
+    authorizationUrl: "http://host.com"
+    x-tokenIntrospect:
+      url: $(security-url)
+  x-IBM-Client-Id:
+    type: apiKey
+    description: Client Id registered in API Portal
+    in: header
+    name: X-IBM-Client-Id
+security:
+- x-IBM-Client-Id: []
+paths:
+  /:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/_GetBankArrayResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Obtains customer banks status information.
+      description: "This feature returns the status information of the connection with each bank that the customer previously connected. With that information the user can ask for the Global Position of the bank."
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      security:
+      - JWT Profile:
+        - bankbranch.read
+  /{bank_id}:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Bank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Obtains a particular bank customer information.
+      description: "This feature returns the status information of the connection with a bank and it means that the customer connected that bank previously. With that information the user can ask for the Global Position of the bank."
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      - name: bank_id
+        type: string
+        required: true
+        in: path
+        description : "Unique bank ID"
+        x-example : "AAOZ"
+      security:
+      - JWT Profile:
+        - bankbranch.read
+    delete:
+      responses:
+        204:
+          description: The bank was deleted successfully.
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Deregister the bank previously added by the customer.
+      description: "This feature allow to the user deregister the bank previously added by the customer. It receives the id of the bank to perform the operation."
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      - name: bank_id
+        type: string
+        required: true
+        in: path
+        description : "Unique bank ID"
+        x-example : "AAOZ"
+      security:
+      - JWT Profile:
+        - bankbranch.read
+  /{bank_id}/refresh:
+    post:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/Bank'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Update a particular bank customer information.
+      description: "This feature returns the status information of the connection with a bank and it means that the customer connected that bank previously."
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      - name: bank_id
+        type: string
+        required: true
+        in: path
+        description : "Unique bank ID"
+        x-example : "AAOZ"
+      security:
+      - JWT Profile:
+        - bankbranch.read
+  /{bank_id}/branches:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/_GetBranchArrayResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Obtains a specific bank branches information for a customer.
+      description: "This functionality allows  to have all the branches for a specific customer"
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      - name: bank_id
+        type: string
+        required: true
+        in: path
+        description : "Unique bank ID"
+        x-example : "AAOZ"
+      security:
+      - JWT Profile:
+        - bankbranch.read
+  /{bank_id}/branches/{branch_id}:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/_GetBranchResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: Obtains specific branch information of a specific bank.
+      description: "This functionality allows  to have the information of contact
+        for a specific branch in a specific bank. \nThe information of contact are:
+        \nPostal addres : if the branch have a local where the customer could go \nLand
+        line phone: for the telephone land line to contact the customer and the schedule
+        in every day of a week. \nEmail: for the generic email contact with the schedule
+        in every day of a week.  \nThe way to fill in the fields  bank and branch
+        will differ by country:  \n -Countries where they have identified the concept
+        of branch, fill in both data, examples of countries that work asis are Spain,
+        Portugal ...  \n -Countries where the concept of branch does not exist or
+        is embedded in the bank's codification, in this case only the bank field will
+        be filled in, example countries of this format are USA, Austria, Germany...
+        \ \n -There is a special case with UK that the bank field can be informed
+        with the sort code, if the consumer does not know the bank code.  \nIn all
+        the cases the bank id could be informed in BIC format or in local format acording
+        to the central bank in each country. \nAlways returns information even if
+        the branch is not informed because the data goes in the bank identification."
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+
+      - name: bank_id
+        type: string
+        required: true
+        in: path
+        description : "Unique bank ID"
+        x-example : "AAOZ"
+      - name: branch_id
+        type: string
+        required: true
+        in: path
+        description: "This data corresponds to the codification of the branch id in
+          the BBAN format of the contract . \nThis data is not present in all the
+          countries, p.e Germany or US… because it is inserted in the bank id."
+        x-example: "0123"
+      security:
+      - JWT Profile:
+        - bankbranch.read
+  /bank_calculate:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/_GetBankCalculateResponse'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/Errors'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/Errors'
+        403:
+          description: Forbidden
+          schema:
+            $ref: '#/definitions/Errors'
+        404:
+          description: Not found
+          schema:
+            $ref: '#/definitions/Errors'
+        500:
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/Errors'
+        503:
+          description: Service unavailable
+          schema:
+            $ref: '#/definitions/Errors'
+        504:
+          description: Gateway timeout
+          schema:
+            $ref: '#/definitions/Errors'
+      summary: This functionality allows to have the information of the BIC Code bank
+        according to a contract input and his basic information.
+      description: |-
+        This functionality allows to obtain from a contract, in two diferent formats, the information associated to the bank in BIC code format.
+        The information associated to the BIC code is the neme of the bank and his postal address.
+        Also provided the local bank code and the branch code associared to the contract in the input.
+        Not always exist the local branch in all the contracts of the different countries, p.e. countries USA, Austria, Germany...
+      parameters:
+      - $ref: '#/parameters/authorization'
+      - $ref: '#/parameters/language'
+      - $ref: '#/parameters/accept-language'
+      - $ref: '#/parameters/device-information'
+      - $ref: '#/parameters/santander-client-id'
+      - $ref: '#/parameters/content-type'
+      - $ref: '#/parameters/accept'
+      - $ref: '#/parameters/x-ibm-client-id'
+      - $ref: '#/parameters/x-b3-traceid'
+      - $ref: '#/parameters/x-b3-parentspanid'
+      - $ref: '#/parameters/x-b3-spanid'
+      - $ref: '#/parameters/x-b3-sampled'
+      - $ref: '#/parameters/x-santander-audit'
+      - $ref: '#/parameters/trusted-device-app-id'
+      - $ref: '#/parameters/santander-cipher-type'
+      - $ref: '#/parameters/santander-cipher-seed'
+      - $ref: '#/parameters/trusted-device-time'
+      - $ref: '#/parameters/trusted-device-params'
+      - name: countryBban
+        type: string
+        required: false
+        in: query
+        description: Country asociated to the contrat_id when the selected type is
+          BBAN is mandatory to provied it. Values asociated to the ISO 3166-1 alfa-2.
+        x-example: ES
+      - name: contractType
+        type: string
+        required: true
+        in: query
+        description: |-
+          Type of the contract the supported values are:
+          - IBAN: International Bank Account Number in electronic format
+          - BBAN: local format in the local banks
+        x-example: BBAN
+      security:
+      - JWT Profile:
+        - bankbranch.read
+definitions:
+  _GetBranchArrayResponse:
+    type: object
+    x-bizObjRef: ContactPoint
+    description: "Data structure containing information about a contact point. A contact point is a phone number, physical address, or virtual address used for communication purposes."
+    properties :
+      branches:
+        type: array
+        items:
+          $ref: '#/definitions/_GetBranchResponse'
+
+  _GetBankArrayResponse:
+    type: object
+    description: "Data structure containing information about banks. A bank is a code, name, status, logo and bank id."
+    properties :
+      banks:
+        type: array
+        items:
+          $ref: '#/definitions/Bank'
+
+  _GetBranchResponse:
+    type: object
+    x-bizObjRef: ContactPoint
+    description: "Data structure containing information about a contact point. A contact point is a phone number, physical address, or virtual address used for communication purposes."
+    properties :
+      postalAddress :
+        $ref : "#/definitions/PostalAddress"
+      phoneAddress :
+        $ref : "#/definitions/PhoneAddress"
+      electronicAddress :
+        $ref : "#/definitions/ElectronicAddress"
+ #============================================================================
+ # PostalAddress
+ #============================================================================
+  PostalAddress :
+    description : "Data structure containing information that locates and identifies a postal address"
+    type : "object"
+    properties :
+       streetName :
+          type : "string"
+          description : "Name of a street or thoroughfare"
+          example : "Avenida de Toledo"
+          minLength : 1
+          maxLength : 64
+       streetBuildingIdentification :
+          type : "string"
+          description : "Number that identifies the position of a building on a street"
+          example : "22"
+          minLength : 1
+          maxLength : 56
+       postCodeIdentification :
+          type : "string"
+          description : "Postal code.\n\nThe value consists of a group of letters and/or numbers that is added to a postal address to assist in sorting the mail."
+          example : "28660"
+          maxLength : 16
+       townName :
+          type : "string"
+          description : "Name of a built-up area with defined boundaries and a local government"
+          example : "MADRID"
+          maxLength : 70
+       state :
+        description : "Data structure containing state information"
+        type : "object"
+        properties :
+          code :
+              type : "string"
+              description : "State code.\n\nThe value is based on the ISO 3166-2 (https://www.iso.org/obp/ui/#search/code/)."
+              example : "ES-M"
+              minLength : 0
+              maxLength : 10
+          name :
+            type : "string"
+            description : "State name"
+            example : "Madrid"
+            minLength : 0
+            maxLength : 35
+       buildingName :
+          type : "string"
+          description : "Name of the building or house"
+          example : "Residencial Los Pinos"
+          maxLength : 35
+       floor :
+          type : "string"
+          description : "Floor or storey within a building"
+          example : "3"
+          maxLength : 16
+       districtName :
+          type : "string"
+          description : "Name of a district, for example, a part of a town or region"
+          example : "Chamartin"
+          maxLength : 35
+       regionIdentification :
+          description : "Data structure containing region information"
+          type : "object"
+          properties :
+            code :
+                type : "string"
+                description : "Region code.\n\nThe value is based on the ISO 3166-2 (https://www.iso.org/obp/ui/#search/code/)."
+                example : "ES-M"
+                minLength : 0
+                maxLength : 10
+            name :
+              type : "string"
+              description : "Region name"
+              example : "Madrid"
+              minLength : 0
+              maxLength : 35
+       countyIdentification :
+          description : "Data structure containing county information"
+          type : "object"
+          properties :
+            code :
+                type : "string"
+                description : "County code.\n\nThe value is based on the ISO 3166-2 (https://www.iso.org/obp/ui/#search/code/)."
+                example : "ES-M"
+                minLength : 0
+                maxLength : 10
+            name :
+              type : "string"
+              description : "County name"
+              example : "County name"
+              minLength : 0
+              maxLength : 35
+       postOfficeBox :
+          type : "string"
+          description : "Number of a box in a post office, assigned to a person or organization.\n\nLetters are stored in the box until called for."
+          example : "8080"
+          minLength : 1
+          maxLength : 10
+       province :
+          description : "Data structure containing province information"
+          type : "object"
+          properties :
+            code :
+                type : "string"
+                description : "Province code.\n\nThe value is based on the ISO 3166-2 (https://www.iso.org/obp/ui/#search/code/)."
+                example : "ES-M"
+                minLength : 0
+                maxLength : 10
+            name :
+              type : "string"
+              description : "Province name"
+              example : "Madrid"
+              minLength : 0
+              maxLength : 35
+       department :
+          type : "string"
+          description : "Name of a division within a large organization or building"
+          example : "Generic department name"
+          maxLength : 70
+       subDepartment :
+          type : "string"
+          description : "Name of a sub-division within a large organization or building"
+          example : "Generic subdepartment name"
+          maxLength : 70
+       location :
+          type : "string"
+          description : "Generic location name that specifies a place"
+          example : "Generic location"
+          maxLength : 16
+       country :
+          description : "Data structure containing country information"
+          type : "object"
+          properties :
+            code :
+                type : "string"
+                description : "Country code.\n\nThe value is based on the ISO 3166 (https://www.iso.org/obp/ui/#search/code/)."
+                example : "ES"
+                maxLength : 3
+            name :
+              type : "string"
+              description : "Country name.\n\nThe value is based on the ISO 3166 (https://www.iso.org/obp/ui/#search/code/)."
+              example : "Spain"
+              minLength : 0
+              maxLength : 35
+
+#============================================================================
+# PhoneAddress
+#============================================================================
+  PhoneAddress :
+    description : "Data structure containing information that identifies a phone address"
+    type : "object"
+    properties :
+       phoneNumber :
+          type : "string"
+          description : "Phone number, as defined by a telecom service"
+          example : "+44-01142726444"
+          minLength : 2
+          maxLength : 35
+       bestContactDays :
+          description : "Data structure containing information about the best contact times by day for the phone address"
+          type : "array"
+          items :
+             type : "object"
+             properties :
+                day :
+                   type : "string"
+                   description : "Day of the week"
+                   example : "Monday"
+                fromDateTime :
+                   type : "string"
+                   description : "Start time of the day during which a customer can be contacted. The value uses the format 'HH.mm.ss'."
+                   example : "08:00"
+                toDateTime :
+                   type : "string"
+                   description : "End time of the day during which a customer can be contacted. The value uses the format 'HH.mm.ss'."
+                   example : "18:00"
+ #============================================================================
+ # ElectronicAddress
+ #============================================================================
+  ElectronicAddress :
+    description : "Data structure containing information that identifies an electronic address"
+    type : "object"
+    properties :
+       emailAddress :
+          type : "string"
+          description : "Email address"
+          example : "testjulicert@test2.co"
+          minLength : 2
+          maxLength : 256
+       bestContactDays :
+          description : "Data structure containing information about the best contact times by day for the electronic address"
+          type : "array"
+          items :
+             type : "object"
+             properties :
+                day :
+                   type : "string"
+                   description : "Day of the week"
+                   example : "Monday"
+                fromDateTime :
+                   type : "string"
+                   description : "Start time of the day during which a customer can be contacted. The value uses the format 'HH.mm.ss'."
+                   example : "08:00"
+                toDateTime :
+                   type : "string"
+                   description : "End time of the day during which a customer can be contacted. The value uses the format 'HH.mm.ss'."
+                   example : "18:00"
+  _GetBranchesListResponse:
+    description : "Array of bank centers"
+    type : "array"
+    items :
+      $ref : "#/definitions/_GetBranchesResponse"
+  _GetBranchesResponse:
+    description : "Data structure containing bank centre details"
+    x-bizObjRef: Center
+    type : "object"
+    properties :
+      address :
+        description : "Data structure containing information that locates and identifies a postal address"
+        type : "object"
+        properties :
+              streetName :
+                type : "string"
+                description : "Name of a street or thoroughfare"
+                example : "AV.ALMIRANTE RE IS,120-A 1150-023 LISBOA"
+                minLength : 1
+                maxLength : 64
+      centerId :
+        description : "Bank centre ID"
+        example : "0014"
+        type : "string"
+        minLength : 4
+        maxLength : 4
+      name :
+        description : "Bank centre name"
+        example : "ALMIRANTE REIS"
+        type : "string"
+      phoneAddresses :
+        description : "Array of information that identifies a phone address"
+        type : "array"
+        items :
+          description : "Data structure containing information that identifies a phone address"
+          type : "object"
+          properties :
+            phoneNumber :
+              type : "string"
+              description : "Phone number, as defined by a telecom service"
+              example : "218160490"
+              minLength : 2
+              maxLength : 35
+      zone :
+        description : "zone id"
+        example : "6302"
+        type : "string"
+  _GetDetailedBranchesResponse:
+    description : "Data structure containing bank centre details"
+    x-bizObjRef: Center
+    type : "object"
+    properties :
+      address :
+        description : "Data structure containing information that locates and identifies a postal address"
+        type : "object"
+        properties :
+              streetName :
+                type : "string"
+                description : "Name of a street or thoroughfare"
+                example : "AV.ALMIRANTE RE IS,120-A 1150-023 LISBOA"
+                minLength : 1
+                maxLength : 64
+      centerId :
+        description : "Bank centre ID"
+        example : "0014"
+        type : "string"
+        minLength : 4
+        maxLength : 4
+      name :
+        description : "Bank centre name"
+        example : "ALMIRANTE REIS"
+        type : "string"
+      phoneAddresses :
+        description : "Array of information that identifies a phone address"
+        type : "array"
+        items :
+          description : "Data structure containing information that identifies a phone address"
+          type : "object"
+          properties :
+            phoneNumber :
+              type : "string"
+              description : "Phone number, as defined by a telecom service"
+              example : "218160490"
+              minLength : 2
+              maxLength : 35
+      zone :
+        description : "zone id"
+        example : "6302"
+        type : "string"
+
+  _GetBankCalculateResponse:
+    description : "Data structure containing bank details"
+    type : "object"
+    properties :
+      contract  :
+        $ref : "#/definitions/Contract"
+      bank:
+        $ref : "#/definitions/Bank"
+
+  Contract :
+    type : "object"
+    description : "Data structure containing contract information"
+    properties :
+       contractId :
+          type : "string"
+          description : "Contract ID"
+          example : "031710023000002365"
+
+  Bank:
+    description : "Data structure containing bank details"
+    type : "object"
+    properties :
+      bankName :
+        description : "Bank name"
+        example : "banco santander mexico"
+        type : "string"
+        minLength : 0
+        maxLength : 50
+      bic :
+        description : "Bank identifier code (BIC)"
+        example : "BCMRMXMMTIN"
+        type : "string"
+        minLength : 8
+        maxLength : 11
+      typeRefresh:
+        description : "Type of refresh of information for this particular bank"
+        example : "PSD2"
+        type : "string"
+        enum :
+          - PSD2
+          - NOPSD2
+          - INTERNAL
+        minLength : 0
+        maxLength : 15
+      oldestTransactionDate :
+        type : "string"
+        format : "date"
+        description : "Balance last update date. The value uses the complete data format defined in ISO 8601: 'YYYY-MM-DD' Where: - YYYY: 4-digit year - MM: 2-digit month (for example, 01 = January) - DD: 2-digit day of the month (01 through 31)"
+        example : "2020-12-01"
+      lastRequestDateTime :
+          type : "string"
+          format : "date-time"
+          description : "Date and time when last request was done.\n\nThe value uses the complete data format defined in ISO 8601:\n\n'YYYY-MM-DDThh:mm:ss.sssTZD'\n\nWhere:\n- YYYY: 4-digit year\n- MM: 2-digit month (for example, 01 = January)\n- DD: 2-digit day of the month (01 through 31)\n- hh: 2-digit hour of the day (00 through 23)\n- mm: 2-digit minute of the hour (00 through 59)\n- ss.sss: 5-digit seconds and milliseconds, separated by a point\n- TZD: Time zone indicator"
+          example : "1998-03-14T17:32:28.123Z"
+      contactPoint :
+        description : "Data structure containing information about a contact point. A contact point is a phone number, physical address, or virtual address used for communication purposes."
+        type : "object"
+        properties :
+          postalAddress :
+            description : "Data structure containing information that locates and identifies a postal address"
+            type : "object"
+            properties :
+              streetName :
+                  type : "string"
+                  description : "Name of a street or thoroughfare"
+                  example : "Avenida de Toledo"
+                  minLength : 1
+                  maxLength : 64
+              streetBuildingIdentification :
+                  type : "string"
+                  description : "Number that identifies the position of a building on a street"
+                  example : "22"
+                  minLength : 1
+                  maxLength : 56
+              postCodeIdentification :
+                  type : "string"
+                  description : "Postal code.\n\nThe value consists of a group of letters and/or numbers that is added to a postal address to assist in sorting the mail."
+                  example : "28660"
+                  maxLength : 16
+              townName :
+                  type : "string"
+                  description : "Name of a built-up area with defined boundaries and a local government"
+                  example : "MADRID"
+                  maxLength : 70
+              state :
+                description : "Data structure containing state information"
+                type : "object"
+                properties :
+                  name :
+                    type : "string"
+                    description : "State name"
+                    example : "Madrid"
+                    minLength : 0
+                    maxLength : 35
+              buildingName :
+                  type : "string"
+                  description : "Name of the building or house"
+                  example : "Residencial Los Pinos"
+                  maxLength : 35
+              floor :
+                  type : "string"
+                  description : "Floor or storey within a building"
+                  example : "3"
+                  maxLength : 16
+              districtName :
+                  type : "string"
+                  description : "Name of a district, for example, a part of a town or region"
+                  example : "Chamartin"
+                  maxLength : 35
+              regionIdentification :
+                  description : "Data structure containing region information"
+                  type : "object"
+                  properties :
+                    name :
+                      type : "string"
+                      description : "Region name"
+                      example : "Madrid"
+                      minLength : 0
+                      maxLength : 35
+              countyIdentification :
+                  description : "Data structure containing county information"
+                  type : "object"
+                  properties :
+                    name :
+                      type : "string"
+                      description : "County name"
+                      example : "County name"
+                      minLength : 0
+                      maxLength : 35
+              postOfficeBox :
+                  type : "string"
+                  description : "Number of a box in a post office, assigned to a person or organization.\n\nLetters are stored in the box until called for."
+                  example : "8080"
+                  minLength : 1
+                  maxLength : 10
+              province :
+                  description : "Data structure containing province information"
+                  type : "object"
+                  properties :
+                    name :
+                      type : "string"
+                      description : "Province name"
+                      example : "Madrid"
+                      minLength : 0
+                      maxLength : 35
+              department :
+                  type : "string"
+                  description : "Name of a division within a large organization or building"
+                  example : "Generic department name"
+                  maxLength : 70
+              subDepartment :
+                  type : "string"
+                  description : "Name of a sub-division within a large organization or building"
+                  example : "Generic subdepartment name"
+                  maxLength : 70
+              location :
+                  type : "string"
+                  description : "Generic location name that specifies a place"
+                  example : "Generic location"
+                  maxLength : 16
+              country :
+                  description : "Data structure containing country information"
+                  type : "object"
+                  properties :
+                    name :
+                      type : "string"
+                      description : "Country name.\n\nThe value is based on the ISO 3166 (https://www.iso.org/obp/ui/#search/code/)."
+                      example : "Spain"
+                      minLength : 0
+                      maxLength : 35
+      bankId :
+        description : "Unique bank ID"
+        example : "0030"
+        type : "string"
+      center :
+        description : "Data structure containing bank centre details"
+        type : "object"
+        properties :
+          centerId :
+            description : "Bank centre ID"
+            example : "3445"
+            type : "string"
+            minLength : 4
+            maxLength : 4
+      logo :
+        $ref : "#/definitions/Logo"
+      status:
+        $ref : "#/definitions/StatusInfo"
+
+#=================================================================
+ # Logo
+ #==================================================================
+  Logo :
+    type : "object"
+    description : "Data structure containing information about a logo (image)."
+    properties :
+      URL :
+        type : "string"
+        description : "URL where the logo is available."
+        example : "https://servidor/logo.jpg"
+
+  StatusInfo :
+    description : "Data structure containing information about the status of an item"
+    type : "object"
+    properties :
+       statusCode :
+          type : "string"
+          description : "Status code"
+          example : "CANC"
+       statusDescription :
+          type : "string"
+          description : "Status description"
+          example : "Cancelled"
+       statusDateTime :
+          type : "string"
+          format : "date-time"
+          description : "Date and time when the status was established.\n\nThe value uses the complete data format defined in ISO 8601:\n\n'YYYY-MM-DDThh:mm:ss.sssTZD'\n\nWhere:\n- YYYY: 4-digit year\n- MM: 2-digit month (for example, 01 = January)\n- DD: 2-digit day of the month (01 through 31)\n- hh: 2-digit hour of the day (00 through 23)\n- mm: 2-digit minute of the hour (00 through 59)\n- ss.sss: 5-digit seconds and milliseconds, separated by a point\n- TZD: Time zone indicator"
+          example : "1998-03-14T17:32:28.123Z"
+# ============================================================================================================  $$$$$$$
+
+  Errors:
+    type: object
+    description: "Data structure containing the details for errors"
+    properties:
+      errors:
+        description: "Array of errors"
+        type: array
+        items:
+           $ref: "#/definitions/Error"
+# ============================================================================================================  $$$$$$$
+
+  Error:
+    type: object
+    description: "Data structure containing the error details"
+    properties:
+       code:
+          type: string
+          description: "Unique alphanumeric human readable error code"
+          example: "ERR001"
+       message:
+          type: string
+          description: "Brief summary of the reported issue"
+          example: "Invalid Action"
+       level:
+          type: string
+          description: "Level of the reported issue"
+          enum:
+          - info
+          - warning
+          - error
+          example: "error"
+       description:
+          type: string
+          description: "Detailed description of the reported issue"
+          example: "Description"
+tags: []
+parameters:
+  authorization:
+    name: authorization
+    type: string
+    required: true
+    in: header
+    description: Field to send the access token to the API, initially OAuth and JWT.
+  language:
+    name: language
+    type: string
+    required: true
+    in: header
+    description: The server responds with the field in the header with the response language. Following the ([ISO 639-2]-[ISO 3166-1/Alpha3]) code standard.
+    x-example: Spain will be es-ESP
+  accept-language:
+    name: accept-language
+    type: string
+    required: false
+    in: header
+    description: The consumer list of languages by order of preference. Following the (([ISO 639-2]-[ISO 3166-1/Alpha3])) code standard.
+    x-example: Spain will be es-ESP
+  device-information:
+    name: device-information
+    type: string
+    required: true
+    in: header
+    description: >-
+      CHANNEL/SEGMENT FRONT_APP/VERSION DEVICE OS/OS_VERSION NETWORK_CLIENT/VERSION FRAMEWORK/VERSION
+
+      Channel: [ISO 639-2][] plus 5 custom contry digits. For
+      Segment: retail / business
+      Front_App/Version: For example OneApp/1.0
+      Device: Platform value extracted from the device. For example iPhone13
+      OS/VERSION: android / iOS / windows / linux / macOS, version is a platform value extracted from the device. For example iOS/1.0
+      Network_Client/Version: App network client and version. For example CF_Network/5.1
+      Framework/Version: For example Darwin/16.3.0
+  santander-client-id:
+    name: santander-client-id
+    type: string
+    required: true
+    in: header
+    description: The consumer application identifier for APIs. santander-client-id must be defined just as a Request header, this is not a header defined as an API Key at security definition level
+  content-type:
+    name: content-type
+    type: string
+    required: false
+    in: header
+    description: The server responds with the data format of the response. Backend expected a JSON document format.
+    x-example: application/json
+  #
+  # STANDARD HEADER
+  #
+  accept:
+    name: accept
+    type: string
+    required: false
+    in: header
+    description: The consumer request the data format of the response by order of preference.Backend expected a JSON document format.
+    x-example: application/json
+  x-ibm-client-id:
+    name: x-ibm-client-id
+    type: string
+    required: false
+    in: header
+    description: The consumer application identifier (only for IBM API Connect). Legacy. Will be reviewed in future releases.
+  #
+  # TRACK HEADERS
+  # Useful information at https://github.com/openzipkin/b3-propagation
+  #
+  x-b3-traceid:
+    name: x-b3-traceid
+    type: string
+    required: false
+    in: header
+    description: The TraceId is 64 or 128-bit in length and indicates the overall ID of the trace. Every span in a trace shares this ID
+    x-example: 463ac35c9f6413ad48485a3953bb6124
+  x-b3-parentspanid:
+    name: x-b3-parentspanid
+    type: string
+    required: false
+    in: header
+    description: The ParentSpanId is 64-bit in length and indicates the position of the parent operation in the trace tree. When the span is the root of the trace tree, there is no ParentSpanId.
+    x-example: 0020000000000001
+  x-b3-spanid:
+    name: x-b3-spanid
+    type: string
+    required: false
+    in: header
+    description: The SpanId is 64-bit in length and indicates the position of the current operation in the trace tree. The value should not be interpreted. It may or may not be derived from the value of the TraceId
+    x-example: a2fb4a1d1a96d312
+  x-b3-sampled:
+    name: x-b3-sampled
+    type: string
+    required: false
+    in: header
+    description: >-
+      Sampling is a mechanism to reduce the volume of data that ends up in the tracing system. In B3, sampling applies consistently per-trace: once the sampling decision is made, the same value should be consistently sent downstream. This means you will see all spans sharing a trace ID or none.
+
+      Accepted values are\n
+
+      * 1. Means accepted\n
+      * 0. Means denied
+
+      Before this specification was written, some tracers propagated X-B3-Sampled as true or false as opposed to 1 or 0. While you shouldn't encode x-b3-sampled as true or false, a lenient implementation may accept them
+    x-example: 1
+  #
+  # Only for UK
+  #
+  x-santander-audit:
+    name: x-santander-audit
+    type: string
+    required: false
+    in: header
+    description: Extra information coming from the client. Needed for audit purposes
+  #
+  # Only for Poland
+  #
+  trusted-device-app-id:
+    name: trusted-device-app-id
+    type: string
+    required: false
+    in: header
+    description: Device information permitted by operation for data query. Makes it possible to apply an experience base to optimize the data collection. This header is mandatory for Poland due to security reasons
+  trusted-device-time:
+    name: trusted-device-time
+    type: string
+    required: false
+    in: header
+    description: Device time formatted presenting the following the Standard Time Format pattern yyyy-MM-dd'T'HH:mm:ss.SSS'Z'
+    x-example: "2022-04-12T15:55:39.407Z"
+  trusted-device-params:
+    name: trusted-device-params
+    type: string
+    required: false
+    in: header
+    description: Contains encripted parameters from the trusted device parameter source.
+  #
+  # SECURITY HEADERS
+  #
+  santander-cipher-type:
+    name: santander-cipher-type
+    type: string
+    required: false
+    in: header
+    description: >-
+      Indicates what kind of cipher algorithmic approach will be applied to a response fields subset.
+
+      Supported values:
+      * asymmetric
+  santander-cipher-seed:
+    name: santander-cipher-seed
+    type: string
+    required: false
+    in: header
+    description: Seed value applied on both sides to encrypt/decrypt response entity fields. This field is mandatory if Santander-Cipher-Type is presented and is asymetric in the request Headers collection.
+
+x-ibm-endpoints:
+- endpointUrl: https://apigw.extexpintcons.totta.pre.corp/sanpt/external-intcons
+  description: APIMgmt_A99DDCFA34
+  type:
+  - production
+  - development
+...
